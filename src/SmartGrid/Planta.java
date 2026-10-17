@@ -1,6 +1,7 @@
 package SmartGrid;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public abstract class Planta {
 	private int idPlanta;
