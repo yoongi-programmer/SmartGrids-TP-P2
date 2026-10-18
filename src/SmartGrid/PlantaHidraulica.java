@@ -1,5 +1,5 @@
 package SmartGrid;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class PlantaHidraulica extends PlantaRenovable{
 	
@@ -7,7 +7,7 @@ public class PlantaHidraulica extends PlantaRenovable{
 	private int cantTurbinas;
 	
 	public PlantaHidraulica(int idPlanta, String nombre, String direccion,
-			double capMax, LocalDate fecha, String fuentePrimaria,
+			double capMax, LocalDateTime fecha, String fuentePrimaria,
 			double eficienciaPromedio,double capacidadEmbalse, int cantTurbinas) {
 		super(idPlanta, nombre, direccion, capMax, fecha, fuentePrimaria, eficienciaPromedio);
 		this.capacidadEmbalse = capacidadEmbalse;
@@ -20,5 +20,10 @@ public class PlantaHidraulica extends PlantaRenovable{
 	
 	public int getCantTurbinas() {
 		return this.cantTurbinas;
+	}
+	
+	@Override
+	protected double calcularCuotaMinima() {
+		return super.getCapMax() * super.getEficienciaPromedio();
 	}
 }

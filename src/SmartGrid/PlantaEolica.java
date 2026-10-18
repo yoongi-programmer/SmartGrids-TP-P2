@@ -1,5 +1,5 @@
 package SmartGrid;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class PlantaEolica extends PlantaRenovable {
 	
@@ -8,7 +8,7 @@ public class PlantaEolica extends PlantaRenovable {
 	private int cantAerogeneradores;
 	
 	public PlantaEolica(int idPlanta, String nombre, String direccion, 
-            double capMax, LocalDate fecha, 
+            double capMax, LocalDateTime fecha, 
             String fuentePrimaria, double eficienciaPromedio,
             double alturaTorres, double velocidadMinDeViento, 
             int cantAerogeneradores) {
@@ -28,6 +28,11 @@ public class PlantaEolica extends PlantaRenovable {
 	
 	public int getCantAerogeneradores() {
 		return this.cantAerogeneradores;
+	}
+	
+	@Override
+	protected double calcularCuotaMinima() {
+		return super.getCapMax() * super.getEficienciaPromedio();
 	}
 
 }
