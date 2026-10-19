@@ -1,6 +1,5 @@
 package SmartGrid;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public abstract class Planta {     
@@ -29,5 +28,8 @@ public abstract class Planta {
 	}
 	public boolean getActiva() {
 		return this.esActiva;
+	}
+	public String getFecha() {
+		return this.fecha;
 	}
 }

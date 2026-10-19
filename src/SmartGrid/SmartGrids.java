@@ -1,18 +1,19 @@
 package SmartGrid;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class SmartGrids implements ISmartGrids {
-	Map<String, Planta> Plantas = new HashMap<>();
-	
+	Map<String, Planta> plantas = new HashMap<>();
+	//Registo Plantas-----------------------------------------------------------------------------------
 	@Override
 	public void registrarPlantaSolar(String nombre, String direccion, double capacidadMaxima, String fechaHoraPuestaEnFuncionamiento, String fuentePrimaria, 
 									double eficienciaPromedio, double superficieCubierta, int cantidadPaneles, double horasRadiacionDiaria) {
 		PlantaSolar p = new PlantaSolar(nombre, direccion, capacidadMaxima, fechaHoraPuestaEnFuncionamiento, fuentePrimaria, eficienciaPromedio, horasRadiacionDiaria, 
 										cantidadPaneles, superficieCubierta);
-		Plantas.put(nombre, p);
+		plantas.put(nombre, p);
 	}
 
 	@Override
@@ -22,7 +23,7 @@ public class SmartGrids implements ISmartGrids {
 		
 		PlantaEolica p = new PlantaEolica(nombre, direccion, capacidadMaxima, fechaHoraPuestaEnFuncionamiento, fuentePrimaria, eficienciaPromedio, alturaTorres, 
 				velocidadMinimaViento, cantidadAerogeneradores);
-		Plantas.put(nombre, p);
+		plantas.put(nombre, p);
 
 	}
 
@@ -32,7 +33,7 @@ public class SmartGrids implements ISmartGrids {
 			int cantidadTurbinas, double capacidadEmbalse) {
 		PlantaHidraulica p = new PlantaHidraulica(nombre, direccion, capacidadMaxima, fechaHoraPuestaEnFuncionamiento, fuentePrimaria, eficienciaPromedio, capacidadEmbalse, 
 				cantidadTurbinas);
-		Plantas.put(nombre, p);
+		plantas.put(nombre, p);
 
 	}
 
@@ -42,14 +43,26 @@ public class SmartGrids implements ISmartGrids {
 			double capacidadAlmacenamientoCombustible) {
 		
 		 PlantaTermica p = new PlantaTermica(nombre, direccion, capacidadMaxima, fechaHoraPuestaEnFuncionamiento, tipoCombustible, objetivoEmisionesCo2PorHora, capacidadAlmacenamientoCombustible);
-		Plantas.put(nombre, p);
+		plantas.put(nombre, p);
 
 	}
-
+	//Consultar Plantas-----------------------------------------------------------------------------------
 	@Override
 	public List<String> consultarPlantas() {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> lista = new ArrayList<>();
+		
+		for(Map.Entry<String, Planta> entry : plantas.entrySet()) {
+			Planta planta = entry.getValue();
+			
+			String estado;
+			if(planta.getActiva()) { estado = "ACTIVA"; } else { estado = "INACTIVA"; }
+			
+			StringBuilder sb = new StringBuilder();
+	        sb.append(planta.getNombrePlanta()).append(" (").append(estado).append("): ").append(planta.getFecha()); //construye el string {NOMBRE} (ACTIVA/INACTIVA): 18-10-2026T22:00:00
+			
+			lista.add(sb.toString());
+		}
+		return lista;
 	}
 
 	@Override
