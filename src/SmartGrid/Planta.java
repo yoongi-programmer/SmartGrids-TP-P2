@@ -11,6 +11,9 @@ public abstract class Planta {
 	private LocalDateTime fechaInicioActividad;
 	private ArrayList<RegistroMonitoreo> registros;
 	
+	private ArrayList<LocalDateTime[]> periodosInactividad;
+	private LocalDateTime fechaInicioInactividad;
+	
 	public Planta( String nombre, String direccion, double capMax, LocalDateTime fecha) {
 		this.nombre = nombre;
 		this.direccion = direccion;
@@ -18,6 +21,7 @@ public abstract class Planta {
 		this.esActiva = true; //al instanciarla por defecto esta activa
 		this.fechaInicioActividad = fecha;
 		this.registros = new ArrayList<RegistroMonitoreo>();
+		this.periodosInactividad = new ArrayList<>();
 	}
 	
 	public String getNombrePlanta() {
@@ -32,6 +36,14 @@ public abstract class Planta {
 
 	public String getNombre() {
 		return this.nombre;
+	}
+	
+	public String getDireccion() {
+        return this.direccion;
+    }
+	
+	public String getFecha() {
+		return fechaInicioActividad.toString();
 	}
 	
 	protected ArrayList<RegistroMonitoreo> getRegistros() {
@@ -67,6 +79,40 @@ public abstract class Planta {
 		return false;
 	}
 	
+	public void cambiarEstadoActivar(LocalDateTime fechaHora) {
+        if (!this.esActiva) {
+            this.esActiva = true;
+            if (this.fechaInicioInactividad != null) {
+                LocalDateTime[] periodo = {this.fechaInicioInactividad, fechaHora};
+                this.periodosInactividad.add(periodo);
+                this.fechaInicioInactividad = null;
+            }
+        }
+    }
+	
+	public void cambiarEstadoDesactivar(LocalDateTime fechaHora) {
+        if (this.esActiva) {
+            this.esActiva = false;
+            this.fechaInicioInactividad = fechaHora;
+        }
+    }
+	
+	public boolean estabaInactivaEn(LocalDateTime fechaHora) {
+        if (!this.esActiva && this.fechaInicioInactividad != null) {
+            if (!fechaHora.isBefore(this.fechaInicioInactividad)) {
+                return true;
+            }
+        }
+        for (LocalDateTime[] periodo : this.periodosInactividad) {
+            LocalDateTime inicio = periodo[0];
+            LocalDateTime fin = periodo[1];
+            if (!fechaHora.isBefore(inicio) && !fechaHora.isAfter(fin)) {
+                return true;
+            }
+        }
+        return false;
+    }
+	
 	public boolean cumplioCuotaDeGeneracion() {
 		return cumplioCuota();
 	}
@@ -91,9 +137,5 @@ public abstract class Planta {
 		}
 		
 		return cumplioCuota;
-	}
-	
-	public String getFecha() {
-		return fechaInicioActividad.toString();
 	}
 }

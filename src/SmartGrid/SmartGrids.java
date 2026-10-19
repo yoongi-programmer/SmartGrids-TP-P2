@@ -104,21 +104,32 @@ public class SmartGrids implements ISmartGrids {
 
 	@Override
 	public void activarPlanta(String nombre, String fechaHora) {
-		// TODO Auto-generated method stub
-
-	}
+		Planta planta = plantas.get(nombre);
+        if (planta == null) {
+            throw new RuntimeException("La planta '" + nombre + "' no existe");
+        }
+        LocalDateTime fecha = LocalDateTime.parse(fechaHora);
+        planta.cambiarEstadoActivar(fecha);
+    }
 
 	@Override
 	public void desactivarPlanta(String nombre, String fechaHora) {
-		// TODO Auto-generated method stub
-
-	}
+		Planta planta = plantas.get(nombre);
+        if (planta == null) {
+            throw new RuntimeException("La planta '" + nombre + "' no existe");
+        }
+        LocalDateTime fecha = LocalDateTime.parse(fechaHora);
+        planta.cambiarEstadoDesactivar(fecha);
+    }
 
 	@Override
 	public boolean estaActiva(String nombre) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+		Planta planta = plantas.get(nombre);
+        if (planta == null) {
+            throw new RuntimeException("La planta '" + nombre + "' no existe");
+        }
+        return planta.getActiva();
+    }
 
     /*
      * 4) crea un registro de monitoreo en la planta especificada.
