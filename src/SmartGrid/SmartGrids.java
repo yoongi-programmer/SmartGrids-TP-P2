@@ -23,20 +23,24 @@ public class SmartGrids implements ISmartGrids {
      * @throws RuntimeException si ya existe ese nombre o falta o es 
      *         inaceptable algun dato.
      */
-
+	
 	@Override
-	public void registrarPlantaSolar(String nombre, String direccion, double capacidadMaxima,
-			String fechaHoraPuestaEnFuncionamiento, String fuentePrimaria, double eficienciaPromedio,
-			double superficieCubierta, int cantidadPaneles, double horasRadiacionDiaria) {
-		// TODO Auto-generated method stub
+	public void registrarPlantaSolar(String nombre, String direccion, double capacidadMaxima, String fechaHoraPuestaEnFuncionamiento, String fuentePrimaria, 
+									double eficienciaPromedio, double superficieCubierta, int cantidadPaneles, double horasRadiacionDiaria) {
 		
+		PlantaSolar p = new PlantaSolar(nombre, direccion, capacidadMaxima, convertirFechaHora(fechaHoraPuestaEnFuncionamiento), fuentePrimaria, eficienciaPromedio, horasRadiacionDiaria, 
+										cantidadPaneles, superficieCubierta);
+		plantas.put(nombre, p);
 	}
 
 	@Override
 	public void registrarPlantaEolica(String nombre, String direccion, double capacidadMaxima,
 			String fechaHoraPuestaEnFuncionamiento, String fuentePrimaria, double eficienciaPromedio,
 			int cantidadAerogeneradores, double alturaTorres, double velocidadMinimaViento) {
-		// TODO Auto-generated method stub
+		
+		PlantaEolica p = new PlantaEolica(nombre, direccion, capacidadMaxima, convertirFechaHora(fechaHoraPuestaEnFuncionamiento), fuentePrimaria, eficienciaPromedio, alturaTorres, 
+				velocidadMinimaViento, cantidadAerogeneradores);
+		plantas.put(nombre, p);
 
 	}
 
@@ -44,7 +48,9 @@ public class SmartGrids implements ISmartGrids {
 	public void registrarPlantaHidraulica(String nombre, String direccion, double capacidadMaxima,
 			String fechaHoraPuestaEnFuncionamiento, String fuentePrimaria, double eficienciaPromedio,
 			int cantidadTurbinas, double capacidadEmbalse) {
-		// TODO Auto-generated method stub
+		PlantaHidraulica p = new PlantaHidraulica(nombre, direccion, capacidadMaxima, convertirFechaHora(fechaHoraPuestaEnFuncionamiento), fuentePrimaria, eficienciaPromedio, capacidadEmbalse, 
+				cantidadTurbinas);
+		plantas.put(nombre, p);
 
 	}
 
@@ -52,7 +58,9 @@ public class SmartGrids implements ISmartGrids {
 	public void registrarPlantaTermica(String nombre, String direccion, double capacidadMaxima,
 			String fechaHoraPuestaEnFuncionamiento, String tipoCombustible, double objetivoEmisionesCo2PorHora,
 			double capacidadAlmacenamientoCombustible) {
-		// TODO Auto-generated method stub
+		
+		 PlantaTermica p = new PlantaTermica(nombre, direccion, capacidadMaxima, convertirFechaHora(fechaHoraPuestaEnFuncionamiento), tipoCombustible, objetivoEmisionesCo2PorHora, capacidadAlmacenamientoCombustible);
+		plantas.put(nombre, p);
 
 	}
 

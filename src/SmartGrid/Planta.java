@@ -3,8 +3,7 @@ package SmartGrid;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public abstract class Planta {
-	private int idPlanta;
+public abstract class Planta {     
 	private String nombre;
 	private String direccion;
 	private double capMax;
@@ -12,8 +11,7 @@ public abstract class Planta {
 	private LocalDateTime fechaInicioActividad;
 	private ArrayList<RegistroMonitoreo> registros;
 	
-	public Planta(int idPlanta, String nombre, String direccion, double capMax, LocalDateTime fecha) {
-		this.idPlanta = idPlanta;
+	public Planta( String nombre, String direccion, double capMax, LocalDateTime fecha) {
 		this.nombre = nombre;
 		this.direccion = direccion;
 		this.capMax = capMax;
@@ -22,8 +20,8 @@ public abstract class Planta {
 		this.registros = new ArrayList<RegistroMonitoreo>();
 	}
 	
-	public int getIdPlanta() {
-		return this.idPlanta;
+	public String getNombrePlanta() {
+		return this.nombre;
 	}
 	public double getCapMax() {
 		return this.capMax;
