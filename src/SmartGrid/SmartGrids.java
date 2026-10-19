@@ -4,14 +4,15 @@ package SmartGrid;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class SmartGrids implements ISmartGrids {
-
-	private LinkedHashMap<String, Planta> plantas;
+	public LinkedHashMap<String, Planta> plantas;
+	
 	public SmartGrids() {
 		this.plantas = new LinkedHashMap<String, Planta>();
 	}
@@ -29,6 +30,7 @@ public class SmartGrids implements ISmartGrids {
 	public void registrarPlantaSolar(String nombre, String direccion, double capacidadMaxima, String fechaHoraPuestaEnFuncionamiento, String fuentePrimaria, 
 									double eficienciaPromedio, double superficieCubierta, int cantidadPaneles, double horasRadiacionDiaria) {
 		
+		this.controlarPlanta(nombre);
 		PlantaSolar p = new PlantaSolar(nombre, direccion, capacidadMaxima, convertirFechaHora(fechaHoraPuestaEnFuncionamiento), fuentePrimaria, eficienciaPromedio, horasRadiacionDiaria, 
 										cantidadPaneles, superficieCubierta);
 		plantas.put(nombre, p);
@@ -39,6 +41,7 @@ public class SmartGrids implements ISmartGrids {
 			String fechaHoraPuestaEnFuncionamiento, String fuentePrimaria, double eficienciaPromedio,
 			int cantidadAerogeneradores, double alturaTorres, double velocidadMinimaViento) {
 		
+		this.controlarPlanta(nombre);
 		PlantaEolica p = new PlantaEolica(nombre, direccion, capacidadMaxima, convertirFechaHora(fechaHoraPuestaEnFuncionamiento), fuentePrimaria, eficienciaPromedio, alturaTorres, 
 				velocidadMinimaViento, cantidadAerogeneradores);
 		plantas.put(nombre, p);
@@ -49,6 +52,8 @@ public class SmartGrids implements ISmartGrids {
 	public void registrarPlantaHidraulica(String nombre, String direccion, double capacidadMaxima,
 			String fechaHoraPuestaEnFuncionamiento, String fuentePrimaria, double eficienciaPromedio,
 			int cantidadTurbinas, double capacidadEmbalse) {
+		
+		this.controlarPlanta(nombre);
 		PlantaHidraulica p = new PlantaHidraulica(nombre, direccion, capacidadMaxima, convertirFechaHora(fechaHoraPuestaEnFuncionamiento), fuentePrimaria, eficienciaPromedio, capacidadEmbalse, 
 				cantidadTurbinas);
 		plantas.put(nombre, p);
@@ -59,8 +64,9 @@ public class SmartGrids implements ISmartGrids {
 	public void registrarPlantaTermica(String nombre, String direccion, double capacidadMaxima,
 			String fechaHoraPuestaEnFuncionamiento, String tipoCombustible, double objetivoEmisionesCo2PorHora,
 			double capacidadAlmacenamientoCombustible) {
-
-		 PlantaTermica p = new PlantaTermica(nombre, direccion, capacidadMaxima, convertirFechaHora(fechaHoraPuestaEnFuncionamiento), tipoCombustible, objetivoEmisionesCo2PorHora, capacidadAlmacenamientoCombustible);
+		
+		this.controlarPlanta(nombre);
+		PlantaTermica p = new PlantaTermica(nombre, direccion, capacidadMaxima, convertirFechaHora(fechaHoraPuestaEnFuncionamiento), tipoCombustible, objetivoEmisionesCo2PorHora, capacidadAlmacenamientoCombustible);
 		plantas.put(nombre, p);
 
 	}
@@ -209,8 +215,11 @@ public class SmartGrids implements ISmartGrids {
 
 	@Override
 	public double totalGenerado(String nombre) {
-		// TODO Auto-generated method stub
-		return 0;
+		if(plantas.containsKey(nombre)) {
+			return plantas.get(nombre).calcularTotalGenerado();
+		}else {
+			throw new RuntimeException("Ya existe una planta registrada con el nombre: " + nombre);
+		}
 	}
 
 	@Override
@@ -282,8 +291,16 @@ public class SmartGrids implements ISmartGrids {
 
 	@Override
 	public List<String> plantasOrdenadasPorEnergiaGenerada() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Planta> listaPlantas = new ArrayList<>(this.plantas.values());
+		Collections.sort(listaPlantas);
+		List<String> resultado = new ArrayList<>();
+		
+		for(Planta p : listaPlantas) {
+			StringBuilder sb = new StringBuilder();
+			sb.append(p.getNombre()).append(": ").append(p.calcularTotalGenerado());
+			resultado.add(sb.toString());
+		}
+		return resultado;
 	}
 
 	@Override
@@ -309,6 +326,12 @@ public class SmartGrids implements ISmartGrids {
 		} catch (RuntimeException e) {
 			System.out.println("El formato de la fecha y hora ingresada debe ser: yyyy/MM/dd");
 			throw e;
+		}
+	}
+	
+	private void controlarPlanta(String nombre) {
+		if(plantas.containsKey(nombre)) {
+			throw new RuntimeException("Ya existe una planta registrada con el nombre: " + nombre);
 		}
 	}
 	

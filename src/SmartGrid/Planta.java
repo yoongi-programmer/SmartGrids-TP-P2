@@ -3,7 +3,7 @@ package SmartGrid;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public abstract class Planta {     
+public abstract class Planta implements Comparable<Planta>{     
 	private String nombre;
 	private String direccion;
 	private double capMax;
@@ -15,6 +15,9 @@ public abstract class Planta {
 	private LocalDateTime fechaInicioInactividad;
 	
 	public Planta( String nombre, String direccion, double capMax, LocalDateTime fecha) {
+		if(nombre == null) {
+			return;
+		}
 		this.nombre = nombre;
 		this.direccion = direccion;
 		this.capMax = capMax;
@@ -23,7 +26,13 @@ public abstract class Planta {
 		this.registros = new ArrayList<RegistroMonitoreo>();
 		this.periodosInactividad = new ArrayList<>();
 	}
-	
+	double calcularTotalGenerado() {
+		double energiaTotalGenerada = 0;
+		for(RegistroMonitoreo reg : registros) {
+			energiaTotalGenerada += reg.getEnergia();
+		}
+		return energiaTotalGenerada;
+	} 
 	public String getNombrePlanta() {
 		return this.nombre;
 	}
@@ -119,8 +128,7 @@ public abstract class Planta {
 	public boolean cumplioCuotaDeGeneracion() {
 		return cumplioCuota();
 	}
-	
-	
+		
 	public double consultarCuotaMinima() {
 		return calcularCuotaMinima();
 	}
@@ -142,6 +150,9 @@ public abstract class Planta {
 		return cumplioCuota;
 	}
 	
+	public int compareTo(Planta otraPlanta) {
+		return Double.compare(otraPlanta.calcularTotalGenerado(), this.calcularTotalGenerado());
+	}
 	@Override
 	public boolean equals(Object obj) {
 	    if (this == obj) return true;
