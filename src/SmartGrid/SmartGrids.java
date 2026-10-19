@@ -1,12 +1,12 @@
 package SmartGrid;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class SmartGrids implements ISmartGrids {
-	Map<String, Planta> plantas = new HashMap<>();
+	Map<String, Planta> plantas = new LinkedHashMap<>();
 	//Registo Plantas-----------------------------------------------------------------------------------
 	@Override
 	public void registrarPlantaSolar(String nombre, String direccion, double capacidadMaxima, String fechaHoraPuestaEnFuncionamiento, String fuentePrimaria, 
