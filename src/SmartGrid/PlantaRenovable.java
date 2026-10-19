@@ -1,12 +1,12 @@
 package SmartGrid;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public abstract class PlantaRenovable extends Planta{
 	private String fuentePrimaria;
 	private double eficienciaPromedio;
 	
-	public PlantaRenovable(String nombre, String direccion, double capMax, String fecha, String fuentePrimaria, double eficienciaPromedio) {
+	public PlantaRenovable(String nombre, String direccion, double capMax, LocalDateTime fecha, String fuentePrimaria, double eficienciaPromedio) {
 		super(nombre, direccion, capMax, fecha);
 		this.fuentePrimaria = fuentePrimaria;
 		this.eficienciaPromedio = eficienciaPromedio;

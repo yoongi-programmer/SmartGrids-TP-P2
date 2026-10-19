@@ -3,20 +3,18 @@ package SmartGrid;
 import java.time.LocalDateTime;
 
 public class RegistroMonitoreo {
-		private int idRegistro;
 		private LocalDateTime fechaHora;
 		private double energia;
 		private int cantIncidencias;
 		
-		public RegistroMonitoreo(int idRegistro, LocalDateTime fechaHora, double energia, int cantIncidencias) {
-			this.idRegistro = idRegistro;
+		public RegistroMonitoreo(LocalDateTime fechaHora, double energia, int cantIncidencias) {
+			if(energia<0 || cantIncidencias <0) {
+				throw new RuntimeException ("Falla en el registro. Las entradas no pueden ser negativas.");
+			}
+			
 			this.fechaHora = fechaHora;
 			this.energia = energia;
 			this.cantIncidencias = cantIncidencias;
-		}
-
-		public int getIdRegistro() {
-			return idRegistro;
 		}
 
 		public LocalDateTime getFechaHora() {
@@ -27,7 +25,7 @@ public class RegistroMonitoreo {
 			return energia;
 		}
 
-		public int getCantIncidencias() {
+		public int getIncidencias() {
 			return cantIncidencias;
 		}
 		
