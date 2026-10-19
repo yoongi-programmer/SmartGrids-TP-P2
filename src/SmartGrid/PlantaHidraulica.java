@@ -6,10 +6,8 @@ public class PlantaHidraulica extends PlantaRenovable{
 	private double capacidadEmbalse;
 	private int cantTurbinas;
 	
-	public PlantaHidraulica(int idPlanta, String nombre, String direccion,
-			double capMax, LocalDate fecha, String fuentePrimaria,
-			double eficienciaPromedio,double capacidadEmbalse, int cantTurbinas) {
-		super(idPlanta, nombre, direccion, capMax, fecha, fuentePrimaria, eficienciaPromedio);
+	public PlantaHidraulica(String nombre, String direccion, double capMax, String fecha, String fuentePrimaria,	double eficienciaPromedio,double capacidadEmbalse, int cantTurbinas) {
+		super(nombre, direccion, capMax, fecha, fuentePrimaria, eficienciaPromedio);
 		this.capacidadEmbalse = capacidadEmbalse;
 		this.cantTurbinas = cantTurbinas;
 	}

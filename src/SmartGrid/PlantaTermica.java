@@ -2,19 +2,21 @@ package SmartGrid;
 import java.time.LocalDate;
 
 public class PlantaTermica extends PlantaNoRenovable{
+	private double objetivoEmision;
+	private double capCombustible;
 	
-	private double alturaTorres;
-	
-	public PlantaTermica(int idPlanta, String nombre, String direccion,
-            double capMax, LocalDate fecha,
-            String tipoCombustible, double objetivoEmision,
-            double capCombustible, double alturaTorres) {
-		super(idPlanta, nombre, direccion, capMax, fecha, tipoCombustible, objetivoEmision, capCombustible);
-		this.alturaTorres = alturaTorres;
+	public PlantaTermica(String nombre, String direccion, double capMax, String fecha, String tipoCombustible, double objetivoEmision, double capCombustible) {
+		super(nombre, direccion, capMax, fecha, tipoCombustible);
+		this.objetivoEmision = objetivoEmision;
+		this.capCombustible = capCombustible;
 	}
 	
-	public double getAlturaTorres() {
-		return this.alturaTorres;
+	public double getObjetivoEmision() {
+		return objetivoEmision;
+	}
+
+	public double getCapCombustible() {
+		return capCombustible;
 	}
 
 }

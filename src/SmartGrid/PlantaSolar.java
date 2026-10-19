@@ -7,11 +7,10 @@ public class PlantaSolar extends PlantaRenovable {
 	private double superficieCubierta;
 	
 	
-	public PlantaSolar(int idPlanta, String nombre, String direccion, double capMax, LocalDate fecha,
-			String fuentePrimaria, double eficienciaPromedio, double horaDeRadiacionDiaria, 
+	public PlantaSolar(String nombre, String direccion, double capMax, String fecha, String fuentePrimaria, double eficienciaPromedio, double horaDeRadiacionDiaria, 
 			int cantPanelesInstalados, double superficieCubierta) {
 		
-		super(idPlanta, nombre, direccion, capMax, fecha, fuentePrimaria, eficienciaPromedio);
+		super(nombre, direccion, capMax, fecha, fuentePrimaria, eficienciaPromedio);
 		this.horaDeRadiacionDiaria = horaDeRadiacionDiaria;
 		this.cantPanelesInstalados = cantPanelesInstalados;
 		this.superficieCubierta = superficieCubierta;
