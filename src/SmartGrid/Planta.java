@@ -26,9 +26,10 @@ public abstract class Planta {
 	public double getCapMax() {
 		return this.capMax;
 	}
-	public boolean estaActiva() {
+	public boolean getActiva() {
 		return this.esActiva;
 	}
+
 	public String getNombre() {
 		return this.nombre;
 	}
@@ -90,5 +91,9 @@ public abstract class Planta {
 		}
 		
 		return cumplioCuota;
+	}
+	
+	public String getFecha() {
+		return fechaInicioActividad.toString();
 	}
 }

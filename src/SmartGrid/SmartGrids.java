@@ -1,5 +1,6 @@
 package SmartGrid;
 
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class SmartGrids implements ISmartGrids {
+
 	
 	private HashMap<String, Planta> plantas;
 	
@@ -58,16 +60,28 @@ public class SmartGrids implements ISmartGrids {
 	public void registrarPlantaTermica(String nombre, String direccion, double capacidadMaxima,
 			String fechaHoraPuestaEnFuncionamiento, String tipoCombustible, double objetivoEmisionesCo2PorHora,
 			double capacidadAlmacenamientoCombustible) {
-		
+
 		 PlantaTermica p = new PlantaTermica(nombre, direccion, capacidadMaxima, convertirFechaHora(fechaHoraPuestaEnFuncionamiento), tipoCombustible, objetivoEmisionesCo2PorHora, capacidadAlmacenamientoCombustible);
 		plantas.put(nombre, p);
 
 	}
-
+	//Consultar Plantas-----------------------------------------------------------------------------------
 	@Override
 	public List<String> consultarPlantas() {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> lista = new ArrayList<>();
+		
+		for(Map.Entry<String, Planta> entry : plantas.entrySet()) {
+			Planta planta = entry.getValue();
+			
+			String estado;
+			if(planta.getActiva()) { estado = "ACTIVA"; } else { estado = "INACTIVA"; }
+			
+			StringBuilder sb = new StringBuilder();
+	        sb.append(planta.getNombrePlanta()).append(" (").append(estado).append("): ").append(planta.getFecha()); //construye el string {NOMBRE} (ACTIVA/INACTIVA): 18-10-2026T22:00:00
+			
+			lista.add(sb.toString());
+		}
+		return lista;
 	}
 
 	   /*
@@ -127,7 +141,7 @@ public class SmartGrids implements ISmartGrids {
 			throw new RuntimeException ("Falla en el registro. La planta no está registrada.");
 		}
 		
-		if(!plantas.get(nombre).estaActiva()) {
+		if(!plantas.get(nombre).getActiva()) {
 			throw new RuntimeException ("Falla en el registro. La planta no está activa.");
 		}
 		
@@ -145,7 +159,7 @@ public class SmartGrids implements ISmartGrids {
 			throw new RuntimeException ("Falla en el registro. La planta no está registrada.");
 		}
 		
-		if(!plantas.get(nombre).estaActiva()) {
+		if(!plantas.get(nombre).getActiva()) {
 			throw new RuntimeException ("Falla en el registro. La planta no está activa.");
 		}
 
@@ -168,7 +182,7 @@ public class SmartGrids implements ISmartGrids {
 			throw new RuntimeException ("Falla en el registro. La planta no está registrada.");
 		}
 		
-		if(!plantas.get(nombre).estaActiva()) {
+		if(!plantas.get(nombre).getActiva()) {
 			throw new RuntimeException ("Falla en el registro. La planta no está activa.");
 		}
 		
