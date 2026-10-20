@@ -151,7 +151,7 @@ public abstract class Planta implements Comparable<Planta>{
 		return cumplioCuota;
 	}
 	public int[] calcularHistogramaCumplimiento(LocalDate desde, LocalDate hasta) {
-	    int[] histograma = new int[24]; 
+	    int[] histograma = new int[24]; //24hs: 0-23
 
 	    for (RegistroMonitoreo reg : this.registros) {
 	        LocalDate fechaReg = reg.getFechaHora().toLocalDate();
@@ -173,6 +173,21 @@ public abstract class Planta implements Comparable<Planta>{
 	public int compareTo(Planta otraPlanta) {
 		return Double.compare(otraPlanta.calcularTotalGenerado(), this.calcularTotalGenerado());
 	}
+	
+	@Override
+	public String toString() {
+	    String estado = this.esActiva ? "ACTIVA" : "INACTIVA";
+	    StringBuilder sb = new StringBuilder();
+	    sb.append("Planta: ").append(this.nombre)
+	      .append(" [").append(estado).append("]")
+	      .append(" | Dir: ").append(this.direccion)
+	      .append(" | CapMax: ").append(this.capMax)
+	      .append(" | Inicio: ").append(this.fechaInicioActividad)
+	      .append(" | Total Generado: ").append(this.calcularTotalGenerado())
+	      .append(" | Monitoreos: ").append(this.registros); // Imprime la lista usando RegistroMonitoreo.toString()
+	    return sb.toString();
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 	    if (this == obj) return true;

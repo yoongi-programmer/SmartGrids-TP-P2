@@ -53,4 +53,9 @@ public class PlantaTermica extends PlantaNoRenovable{
 	    boolean noSuperoObjetivoEmision = registroPlantaTermica.getCantidadEmisionCO2() < objetivoEmision;
 	    return superoCuotaMinima && noSuperoObjetivoEmision;
 	}
+	
+	@Override
+	public String toString() {
+	    return super.toString() + " | Objetivo de emision: " + objetivoEmision + " | Capacidad combustible: " + capCombustible;
+	}
 }

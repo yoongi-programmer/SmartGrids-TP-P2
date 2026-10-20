@@ -19,4 +19,8 @@ public class MonitoreoPlantaEolica extends RegistroMonitoreo {
 		return velocidadVientoPromedio;
 	}
 	
+	@Override
+	public String toString() {
+	    return super.toString() + " (Viento: " + velocidadVientoPromedio + " m/s)";
+	}
 }

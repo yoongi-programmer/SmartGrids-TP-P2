@@ -71,5 +71,9 @@ public class PlantaEolica extends PlantaRenovable {
 	protected double calcularCuotaMinima() {
 		return super.getCapMax() * super.getEficienciaPromedio();
 	}
-
+	
+	@Override
+	public String toString() {
+	    return super.toString() + " | Viento mínimo: " + velocidadMinDeViento+ " | Altura de torres: " + alturaTorres + " | Aerogeneradores: " + cantAerogeneradores;
+	}
 }

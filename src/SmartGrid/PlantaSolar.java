@@ -33,4 +33,9 @@ public class PlantaSolar extends PlantaRenovable {
 	protected double calcularCuotaMinima() {
 		return (super.getCapMax()*super.getEficienciaPromedio()*horaDeRadiacionDiaria)/24;
 	}
+	
+	@Override
+	public String toString() {
+	    return super.toString() + " | Paneles: " + cantPanelesInstalados + " | RadDiaria: " + horaDeRadiacionDiaria;
+	}
 }

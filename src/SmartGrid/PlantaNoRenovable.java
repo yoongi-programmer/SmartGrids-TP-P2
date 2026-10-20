@@ -14,4 +14,9 @@ public abstract class PlantaNoRenovable extends Planta {
 		return tipoCombustible;
 	}
 	
+	@Override
+	public String toString() {
+	    return super.toString() + " | Tipo de Combustible: " + tipoCombustible;
+	}
+	
 }

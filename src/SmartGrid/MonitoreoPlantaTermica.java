@@ -24,4 +24,9 @@ public class MonitoreoPlantaTermica extends RegistroMonitoreo{
 	public double getCantidadCombustible() {
 		return cantidadCombustible;
 	}
+	
+	@Override
+	public String toString() {
+	    return super.toString() + " (CO2: " + cantidadEmisionCO2 + ", Comb: " + cantidadCombustible + ")";
+	}
 }

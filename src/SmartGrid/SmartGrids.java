@@ -325,6 +325,23 @@ public class SmartGrids implements ISmartGrids {
 	    return inactivas;
 	}
 	//Utilidades-------------------------------------------------------------
+	@Override
+	public String toString() {
+	    StringBuilder sb = new StringBuilder();
+	    sb.append("=== Sistema SmartGrids ===\n");
+	    sb.append("Total de plantas registradas: ").append(plantas.size()).append("\n");
+	    
+	    if (plantas.isEmpty()) {
+	        sb.append("(Sin plantas registradas)\n");
+	    } else {
+	        for (Planta p : plantas.values()) {
+	            // Llama implícitamente a p.toString() de cada planta
+	            sb.append(p.toString()).append("\n");
+	        }
+	    }
+	    return sb.toString();
+	}
+	
 	private LocalDateTime convertirFechaHora(String fecha) {
 		try{
 			LocalDateTime fechaHora = LocalDateTime.parse(fecha);
