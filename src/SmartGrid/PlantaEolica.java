@@ -7,11 +7,8 @@ public class PlantaEolica extends PlantaRenovable {
 	private double velocidadMinDeViento;
 	private int cantAerogeneradores;
 
-	public PlantaEolica(String nombre, String direccion, 
-            double capMax, LocalDateTime fecha, 
-            String fuentePrimaria, double eficienciaPromedio,
-            double alturaTorres, double velocidadMinDeViento, 
-            int cantAerogeneradores) {
+	public PlantaEolica(String nombre, String direccion, double capMax, LocalDateTime fecha, String fuentePrimaria, double eficienciaPromedio,
+            double alturaTorres, double velocidadMinDeViento, int cantAerogeneradores) {
 		super (nombre, direccion, capMax, fecha, fuentePrimaria, eficienciaPromedio);
 		this.alturaTorres = alturaTorres;
 		this.velocidadMinDeViento = velocidadMinDeViento;
@@ -20,7 +17,7 @@ public class PlantaEolica extends PlantaRenovable {
 	
 	public String generarReportePocoViento() {
 	    StringBuilder sb = new StringBuilder();
-	    sb.append("- ").append(this.getNombrePlanta()).append(":  ").append(this.velocidadMinDeViento).append(" m/s\n");
+	    sb.append("- ").append(this.getNombre()).append(":  ").append(this.velocidadMinDeViento).append(" m/s\n");
 	    double[] vientosPorHora = this.calcularMaxVientoEnHorasSinMinima();
 
 	    for (int h = 0; h < 24; h++) {

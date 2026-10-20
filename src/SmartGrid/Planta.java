@@ -34,34 +34,6 @@ public abstract class Planta implements Comparable<Planta>{
 		}
 		return energiaTotalGenerada;
 	} 
-	public String getNombrePlanta() {
-		return this.nombre;
-	}
-	public double getCapMax() {
-		return this.capMax;
-	}
-	public boolean getActiva() {
-		return this.esActiva;
-	}
-
-	public String getNombre() {
-		return this.nombre;
-	}
-	
-	public String getDireccion() {
-        return this.direccion;
-    }
-	
-	public String getFechaString() {
-		return fechaInicioActividad.toString();
-	}
-	public LocalDateTime getFecha() {
-		return fechaInicioActividad;
-	}
-	
-	protected ArrayList<RegistroMonitoreo> getRegistros() {
-		return registros;
-	}
 
 	public void agregarRegistro(RegistroMonitoreo registro) {
 		
@@ -129,13 +101,6 @@ public abstract class Planta implements Comparable<Planta>{
 	public boolean cumplioCuotaDeGeneracion() {
 		return cumplioCuota();
 	}
-		
-	public double consultarCuotaMinima() {
-		return calcularCuotaMinima();
-	}
-	
-	protected abstract double calcularCuotaMinima();
-	
 	protected boolean cumplioCuota() {
 		if(registros.isEmpty()) {
 			return false;
@@ -150,6 +115,16 @@ public abstract class Planta implements Comparable<Planta>{
 		
 		return cumplioCuota;
 	}
+	protected boolean cumplioCuotaEnRegistro(RegistroMonitoreo reg) {
+		return reg.getEnergia() >= calcularCuotaMinima();
+	} 
+	
+	public double consultarCuotaMinima() {
+		return calcularCuotaMinima();
+	}
+	
+	protected abstract double calcularCuotaMinima();
+	
 	public int[] calcularHistogramaCumplimiento(LocalDate desde, LocalDate hasta) {
 	    int[] histograma = new int[24]; //24hs: 0-23
 
@@ -166,12 +141,33 @@ public abstract class Planta implements Comparable<Planta>{
 	    return histograma;
 	}
 	
-	protected boolean cumplioCuotaEnRegistro(RegistroMonitoreo reg) {
-		return reg.getEnergia() >= calcularCuotaMinima();
-	}
-	
 	public int compareTo(Planta otraPlanta) {
 		return Double.compare(otraPlanta.calcularTotalGenerado(), this.calcularTotalGenerado());
+	}
+	
+	public String getNombre() {
+		return this.nombre;
+	}
+	public double getCapMax() {
+		return this.capMax;
+	}
+	public boolean getActiva() {
+		return this.esActiva;
+	}
+	
+	public String getDireccion() {
+        return this.direccion;
+    }
+	
+	public String getFechaString() {
+		return fechaInicioActividad.toString();
+	}
+	public LocalDateTime getFecha() {
+		return fechaInicioActividad;
+	}
+	
+	protected ArrayList<RegistroMonitoreo> getRegistros() {
+		return registros;
 	}
 	
 	@Override

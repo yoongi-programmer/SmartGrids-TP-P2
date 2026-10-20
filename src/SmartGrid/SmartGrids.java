@@ -76,7 +76,7 @@ public class SmartGrids implements ISmartGrids {
 			if(planta.getActiva()) { estado = "ACTIVA"; } else { estado = "INACTIVA"; }
 			
 			StringBuilder sb = new StringBuilder();
-	        sb.append(planta.getNombrePlanta()).append(" (").append(estado).append("): ").append(planta.getFecha().format(formatter)); //construye el string {NOMBRE} (ACTIVA/INACTIVA): 18-10-2026T22:00:00
+	        sb.append(planta.getNombre()).append(" (").append(estado).append("): ").append(planta.getFecha().format(formatter)); //construye el string {NOMBRE} (ACTIVA/INACTIVA): 18-10-2026T22:00:00
 			
 			lista.add(sb.toString());
 		}
