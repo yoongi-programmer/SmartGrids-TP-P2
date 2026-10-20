@@ -17,14 +17,10 @@ public class SmartGrids implements ISmartGrids {
 		this.plantas = new LinkedHashMap<String, Planta>();
 	}
 	/*
-     * 1.a) Registran una planta con sus datos y caracteristicas.
-     * 
-     * Por defecto la planta se crea en estado activa.  
-     * 
-     * @throws RuntimeException si ya existe ese nombre o falta o es 
-     *         inaceptable algun dato.
+     * 1.a) Registran una planta con sus datos y caracteristicas. Por defecto la planta se crea en estado activa.  
+     * @throws RuntimeException si ya existe ese nombre o falta o es inaceptable algun dato.
      */
-	//Registo Plantas-----------------------------------------------------------------------------------
+	//1.1 Registo Plantas-----------------------------------------------------------------------------------
 	
 	@Override
 	public void registrarPlantaSolar(String nombre, String direccion, double capacidadMaxima, String fechaHoraPuestaEnFuncionamiento, String fuentePrimaria, 
@@ -35,7 +31,6 @@ public class SmartGrids implements ISmartGrids {
 										cantidadPaneles, superficieCubierta);
 		plantas.put(nombre, p);
 	}
-
 	@Override
 	public void registrarPlantaEolica(String nombre, String direccion, double capacidadMaxima,
 			String fechaHoraPuestaEnFuncionamiento, String fuentePrimaria, double eficienciaPromedio,
@@ -47,7 +42,6 @@ public class SmartGrids implements ISmartGrids {
 		plantas.put(nombre, p);
 
 	}
-
 	@Override
 	public void registrarPlantaHidraulica(String nombre, String direccion, double capacidadMaxima,
 			String fechaHoraPuestaEnFuncionamiento, String fuentePrimaria, double eficienciaPromedio,
@@ -59,7 +53,6 @@ public class SmartGrids implements ISmartGrids {
 		plantas.put(nombre, p);
 
 	}
-
 	@Override
 	public void registrarPlantaTermica(String nombre, String direccion, double capacidadMaxima,
 			String fechaHoraPuestaEnFuncionamiento, String tipoCombustible, double objetivoEmisionesCo2PorHora,
@@ -70,7 +63,7 @@ public class SmartGrids implements ISmartGrids {
 		plantas.put(nombre, p);
 
 	}
-	//Consultar Plantas-----------------------------------------------------------------------------------
+	//1.2 Consultar Plantas-----------------------------------------------------------------------------------
 	@Override
 	public List<String> consultarPlantas() {
 		List<String> lista = new ArrayList<>();
@@ -91,14 +84,11 @@ public class SmartGrids implements ISmartGrids {
 	}
 
 	   /*
-     * 2) Consulta cuanta energia debe generar la planta en una hora para
-     * cumplir la cuota. En las solares se tiene en cuenta la radiacion;
-     * en las eolicas e hidraulicas, la eficiencia. Las termicas deben
-     * generar la mitad de su capacidad y emitir menos CO2 que el objetivo
-     * por hora.
-     *
+     * 2) Consulta cuanta energia debe generar la planta en una hora para cumplir la cuota. En las solares se tiene en cuenta la radiacion;
+     * en las eolicas e hidraulicas, la eficiencia. Las termicas deben generar la mitad de su capacidad y emitir menos CO2 que el objetivo por hora.
      * @throws RuntimeException si la planta no existe
      */
+	//2. Consultar capacidad mínima de cuota----------------------------------------------------------------------
 	@Override
 	public double capacidadMinimaCuota(String nombre) {
 		if(!plantas.containsKey(nombre)) {
@@ -107,7 +97,8 @@ public class SmartGrids implements ISmartGrids {
 		
 		return plantas.get(nombre).consultarCuotaMinima();
 	}
-
+	
+	//3. Actualizar estado de planta-----------------------------------------------------------------------------------
 	@Override
 	public void activarPlanta(String nombre, String fechaHora) {
 		Planta planta = plantas.get(nombre);
@@ -117,7 +108,6 @@ public class SmartGrids implements ISmartGrids {
         LocalDateTime fecha = LocalDateTime.parse(fechaHora);
         planta.cambiarEstadoActivar(fecha);
     }
-
 	@Override
 	public void desactivarPlanta(String nombre, String fechaHora) {
 		Planta planta = plantas.get(nombre);
@@ -139,19 +129,13 @@ public class SmartGrids implements ISmartGrids {
 
     /*
      * 4) crea un registro de monitoreo en la planta especificada.
-     * 
-     * Anota la energia y las incidencias de una hora en una planta.
-     * y si corresponde, la velocidad del viento o emision de CO2 y 
-     * uso de combuistible, segun corresponda.
-     *
+     * Anota la energia y las incidencias de una hora en una planta. y si corresponde, la velocidad del viento o emision de CO2 y uso de combuistible, segun corresponda.
      * @throws RuntimeException si la planta no existe o esta inactiva; 
-     *         si falta la fechaHora, es anterior a la puesta en marcha o ya 
-     *         hay un registro para esa hora; o si la energia o las incidencias
-     *         son negativas, etc.
+     *   si falta la fechaHora, es anterior a la puesta en marcha o ya hay un registro para esa hora; o si la energia o las incidencias son negativas, etc.
      */
+	//4. Registo Monitoreo-----------------------------------------------------------------------------------
 	@Override
-	public void registrarMonitoreo(String nombre, String fechaHora, double energiaGenerada, int incidencias) {
-			
+	public void registrarMonitoreo(String nombre, String fechaHora, double energiaGenerada, int incidencias) {	
 		boolean plantaRegistrada = plantas.containsKey(nombre);
 
 		if(nombre == null || !plantaRegistrada) {
@@ -166,10 +150,8 @@ public class SmartGrids implements ISmartGrids {
 		
 		plantas.get(nombre).agregarRegistro(nuevoRegistro);
 	}
-
 	@Override
-	public void registrarMonitoreo(String nombre, String fechaHora, double energiaGenerada, int incidencias,
-			double velocidadViento) {
+	public void registrarMonitoreo(String nombre, String fechaHora, double energiaGenerada, int incidencias, double velocidadViento) {
 		boolean plantaRegistrada = plantas.containsKey(nombre);
 
 		if(!plantaRegistrada) {
@@ -189,10 +171,8 @@ public class SmartGrids implements ISmartGrids {
 		plantas.get(nombre).agregarRegistro(nuevoRegistro);
 
 	}
-
 	@Override
-	public void registrarMonitoreo(String nombre, String fechaHora, double energiaGenerada, int incidencias,
-			double co2Emitido, double combustibleUtilizado) {
+	public void registrarMonitoreo(String nombre, String fechaHora, double energiaGenerada, int incidencias, double co2Emitido, double combustibleUtilizado) {
 		boolean plantaRegistrada = plantas.containsKey(nombre);
 
 		if(!plantaRegistrada) {
@@ -212,7 +192,7 @@ public class SmartGrids implements ISmartGrids {
 		plantas.get(nombre).agregarRegistro(nuevoRegistro);
 
 	}
-
+	//5. Consultar total generado-----------------------------------------------------------------------------------
 	@Override
 	public double totalGenerado(String nombre) {
 		if(plantas.containsKey(nombre)) {
@@ -221,7 +201,7 @@ public class SmartGrids implements ISmartGrids {
 			throw new RuntimeException("Ya existe una planta registrada con el nombre: " + nombre);
 		}
 	}
-
+	//6. Consulta total incidencias-----------------------------------------------------------------------------------
 	@Override
 	public int[] incidenciasPorHora(String nombre) {
 	    if (!plantas.containsKey(nombre)) {
@@ -238,7 +218,7 @@ public class SmartGrids implements ISmartGrids {
 	    
 	    return incidencias;
 	}
-
+	//7. Histograma-----------------------------------------------------------------------------------
 	@Override
 	public int[] histogramaCumplimiento(String nombre, String fechaDesde, String fechaHasta) {
 		// TODO Auto-generated method stub
@@ -246,9 +226,9 @@ public class SmartGrids implements ISmartGrids {
 	}
 
 	/*
-     * 8) Calcula y devulve la cantidad de plantas renovables por fuente 
-     * primaria, ordenadas por tipo de fuente.
+     * 8) Calcula y devulve la cantidad de plantas renovables por fuente primaria, ordenadas por tipo de fuente.
      */
+	//8. Cantidad plantas por fuente-----------------------------------------------------------------------------------
 	@Override
 	public Map<String, Integer> plantasRenovablesPorFuente() {
 		Map<String, Integer> plantasRenovablesPorFuente = new HashMap<String, Integer>();
@@ -272,9 +252,9 @@ public class SmartGrids implements ISmartGrids {
 	}
 
 	  /*
-     * 9) Devuelve nombres de las plantas que nunca cumplieron la cuota, 
-     * incluso si no tienen monitoreos.
+     * 9) Devuelve nombres de las plantas que nunca cumplieron la cuota, incluso si no tienen monitoreos.
      */
+	//9. Plantas que nunca cumplieron-----------------------------------------------------------------------------------
 	@Override
 	public List<String> plantasQueNuncaCumplieronCuota() {
 		List<String> plantasQueNuncaCumplieronCuota = new ArrayList<String>();
@@ -287,19 +267,27 @@ public class SmartGrids implements ISmartGrids {
 		
 		return plantasQueNuncaCumplieronCuota;
 	}
-
+	//10. Plantas eolicas sin velocidad mínima--------------------------------------------------------------------------
 	@Override
 	public String horasSinVelocidadMinimaPorPlantaEolica() {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuilder sb = new StringBuilder();
+		sb.append("Plantas Eolicas: Horas con poco viento \n");
+		
+		for(Planta planta : plantas.values()) {
+			if(planta instanceof PlantaEolica) {
+				PlantaEolica eolica = (PlantaEolica) planta;
+				sb.append(eolica.generarReportePocoViento());
+			}
+		}
+		return sb.toString();
 	}
-
+	//11. Limpiar registros---------------------------------------------------------------------------------------------
 	@Override
 	public int limpiarMonitoreosSinDatos() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
+	//12. Plantas ordenadas por energia generada------------------------------------------------------------------------
 	@Override
 	public List<String> plantasOrdenadasPorEnergiaGenerada() {
 		List<Planta> listaPlantas = new ArrayList<>(this.plantas.values());
@@ -313,7 +301,7 @@ public class SmartGrids implements ISmartGrids {
 		}
 		return resultado;
 	}
-
+	//13. Plantas inactivas por hora-----------------------------------------------------------------------------------
 	@Override
 	public List<String> plantasInactivasEn(String fechaHora) {
 	    LocalDateTime fecha = LocalDateTime.parse(fechaHora);
