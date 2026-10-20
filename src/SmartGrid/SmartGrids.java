@@ -308,7 +308,7 @@ public class SmartGrids implements ISmartGrids {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	//Utilidades-------------------------------------------------------------
 	private LocalDateTime convertirFechaHora(String fecha) {
 		try{
 			LocalDateTime fechaHora = LocalDateTime.parse(fecha);
