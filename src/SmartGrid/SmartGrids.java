@@ -224,8 +224,19 @@ public class SmartGrids implements ISmartGrids {
 
 	@Override
 	public int[] incidenciasPorHora(String nombre) {
-		// TODO Auto-generated method stub
-		return null;
+	    if (!plantas.containsKey(nombre)) {
+	        throw new RuntimeException("La planta '" + nombre + "' no existe");
+	    }
+	    
+	    int[] incidencias = new int[24];
+	    Planta planta = plantas.get(nombre);
+	    
+	    for (RegistroMonitoreo r : planta.getRegistros()) {
+	        int hora = r.getFechaHora().getHour();
+	        incidencias[hora] += r.getIncidencias();
+	    }
+	    
+	    return incidencias;
 	}
 
 	@Override
@@ -305,8 +316,16 @@ public class SmartGrids implements ISmartGrids {
 
 	@Override
 	public List<String> plantasInactivasEn(String fechaHora) {
-		// TODO Auto-generated method stub
-		return null;
+	    LocalDateTime fecha = LocalDateTime.parse(fechaHora);
+	    List<String> inactivas = new ArrayList<>();
+	    
+	    for (Planta planta : plantas.values()) {
+	        if (planta.estabaInactivaEn(fecha)) {
+	            inactivas.add(planta.getNombre());
+	        }
+	    }
+	    
+	    return inactivas;
 	}
 
 	private LocalDateTime convertirFechaHora(String fecha) {
