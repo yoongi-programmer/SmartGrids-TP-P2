@@ -221,8 +221,17 @@ public class SmartGrids implements ISmartGrids {
 	//7. Histograma-----------------------------------------------------------------------------------
 	@Override
 	public int[] histogramaCumplimiento(String nombre, String fechaDesde, String fechaHasta) {
-		// TODO Auto-generated method stub
-		return null;
+	    if (nombre == null || !plantas.containsKey(nombre)) {
+	        throw new RuntimeException("La planta no existe: " + nombre);
+	    }
+	    LocalDate desde = convertirFecha(fechaDesde);
+	    LocalDate hasta = convertirFecha(fechaHasta);
+
+	    if (desde.isAfter(hasta)) {
+	        throw new RuntimeException("La fecha 'desde' no puede ser posterior a 'hasta'.");
+	    }
+
+	    return plantas.get(nombre).calcularHistogramaCumplimiento(desde, hasta);
 	}
 
 	/*

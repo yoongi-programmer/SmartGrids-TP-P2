@@ -18,7 +18,6 @@ public class PlantaEolica extends PlantaRenovable {
 		this.cantAerogeneradores = cantAerogeneradores;
 	}
 	
-	// 1. Método público: Solo se encarga de armar el texto (Formato)
 	public String generarReportePocoViento() {
 	    StringBuilder sb = new StringBuilder();
 	    sb.append("- ").append(this.getNombrePlanta()).append(":  ").append(this.velocidadMinDeViento).append(" m/s\n");
@@ -38,7 +37,7 @@ public class PlantaEolica extends PlantaRenovable {
 
 	private double[] calcularMaxVientoEnHorasSinMinima() {
 	    double[] estadoHoras = new double[24];
-	    java.util.Arrays.fill(estadoHoras, -1.0); // inicializamos las 24 horas en -1 (sin registros)
+	    java.util.Arrays.fill(estadoHoras, -1.0); // sin registros
 
 	    for (RegistroMonitoreo reg : this.getRegistros()) {
 	        if (reg instanceof MonitoreoPlantaEolica) {
@@ -47,7 +46,7 @@ public class PlantaEolica extends PlantaRenovable {
 	            double viento = mon.getVelocidadVientoPromedio();
 
 	            if (viento >= this.velocidadMinDeViento) {
-	                estadoHoras[hora] = -2.0; // La marcamos como descartada (-2)
+	                estadoHoras[hora] = -2.0; // se descarta porque tiene la velocidad minima
 	            } else if (estadoHoras[hora] != -2.0 && viento > estadoHoras[hora]) {
 	                estadoHoras[hora] = viento;
 	            }

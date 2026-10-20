@@ -1,5 +1,6 @@
 package SmartGrid;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -148,6 +149,25 @@ public abstract class Planta implements Comparable<Planta>{
 		}
 		
 		return cumplioCuota;
+	}
+	public int[] calcularHistogramaCumplimiento(LocalDate desde, LocalDate hasta) {
+	    int[] histograma = new int[24]; 
+
+	    for (RegistroMonitoreo reg : this.registros) {
+	        LocalDate fechaReg = reg.getFechaHora().toLocalDate();
+
+	        boolean enRango = !fechaReg.isBefore(desde) && !fechaReg.isAfter(hasta);
+
+	        if (enRango && this.cumplioCuotaEnRegistro(reg)) {
+	            int hora = reg.getFechaHora().getHour(); // Devuelve entre 0 y 23
+	            histograma[hora]++;
+	        }
+	    }
+	    return histograma;
+	}
+	
+	protected boolean cumplioCuotaEnRegistro(RegistroMonitoreo reg) {
+		return reg.getEnergia() >= calcularCuotaMinima();
 	}
 	
 	public int compareTo(Planta otraPlanta) {
