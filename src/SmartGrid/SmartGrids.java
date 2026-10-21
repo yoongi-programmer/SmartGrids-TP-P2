@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -207,17 +208,11 @@ public class SmartGrids implements ISmartGrids {
 	    if (!plantas.containsKey(nombre)) {
 	        throw new RuntimeException("La planta '" + nombre + "' no existe");
 	    }
-	    
-	    int[] incidencias = new int[24];
-	    Planta planta = plantas.get(nombre);
-	    
-	    for (RegistroMonitoreo r : planta.getRegistros()) {
-	        int hora = r.getFechaHora().getHour();
-	        incidencias[hora] += r.getIncidencias();
-	    }
-	    
-	    return incidencias;
+	    // Delegamos el cálculo a la clase Planta
+	    return plantas.get(nombre).incidenciasPorHora();
 	}
+	
+	
 	//7. Histograma-----------------------------------------------------------------------------------
 	@Override
 	public int[] histogramaCumplimiento(String nombre, String fechaDesde, String fechaHasta) {
@@ -293,8 +288,19 @@ public class SmartGrids implements ISmartGrids {
 	//11. Limpiar registros---------------------------------------------------------------------------------------------
 	@Override
 	public int limpiarMonitoreosSinDatos() {
-		// TODO Auto-generated method stub
-		return 0;
+	    int totalBorrados = 0;
+	    for (Planta planta : plantas.values()) {
+	        Iterator<RegistroMonitoreo> it = planta.getRegistros().iterator();
+	        while (it.hasNext()) {
+	            RegistroMonitoreo r = it.next();
+	            if (r.getEnergia() == 0 && r.getIncidencias() == 0) {
+	                it.remove();
+	                totalBorrados++;
+	            }
+	        }
+	    }
+	    
+	    return totalBorrados;
 	}
 	//12. Plantas ordenadas por energia generada------------------------------------------------------------------------
 	@Override

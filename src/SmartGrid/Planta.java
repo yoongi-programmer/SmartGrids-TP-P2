@@ -170,6 +170,17 @@ public abstract class Planta implements Comparable<Planta>{
 		return registros;
 	}
 	
+	protected int[] incidenciasPorHora() {
+	    int[] incidencias = new int[24];
+	    
+	    for (RegistroMonitoreo r : registros) {
+	        int hora = r.getFechaHora().getHour();
+	        incidencias[hora] += r.getIncidencias();
+	    }
+	    
+	    return incidencias;
+	}
+	
 	@Override
 	public String toString() {
 	    String estado = this.esActiva ? "ACTIVA" : "INACTIVA";
