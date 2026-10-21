@@ -27,14 +27,30 @@ public abstract class Planta implements Comparable<Planta>{
 		this.registros = new ArrayList<RegistroMonitoreo>();
 		this.periodosInactividad = new ArrayList<>();
 	}
-	double calcularTotalGenerado() {
+	public double consultarTotalGenerado() {
+		return calcularTotalGenerado();
+	}
+	private double calcularTotalGenerado() {
 		double energiaTotalGenerada = 0;
 		for(RegistroMonitoreo reg : registros) {
 			energiaTotalGenerada += reg.getEnergia();
 		}
 		return energiaTotalGenerada;
-	} 
-
+	}
+	
+	public int[] consultarIncidenciasPorHora() {
+		return calcularIncidenciasPorHora();
+	}
+	private int[] calcularIncidenciasPorHora() {
+	    int[] incidencias = new int[24];
+	    
+	    for (RegistroMonitoreo r : registros) {
+	        int hora = r.getFechaHora().getHour();
+	        incidencias[hora] += r.getIncidencias();
+	    }
+	    
+	    return incidencias;
+	}
 	public void agregarRegistro(RegistroMonitoreo registro) {
 		
 		if(esAnteriorAInicioActividad(registro.getFechaHora())) {
@@ -64,7 +80,10 @@ public abstract class Planta implements Comparable<Planta>{
 		return false;
 	}
 	
-	public void cambiarEstadoActivar(LocalDateTime fechaHora) {
+	public void activar(LocalDateTime fechaHora) {
+		cambiarEstadoActivar(fechaHora);
+	}
+	private void cambiarEstadoActivar(LocalDateTime fechaHora) {
         if (!this.esActiva) {
             this.esActiva = true;
             if (this.fechaInicioInactividad != null) {
@@ -75,14 +94,20 @@ public abstract class Planta implements Comparable<Planta>{
         }
     }
 	
-	public void cambiarEstadoDesactivar(LocalDateTime fechaHora) {
+	public void desactivar(LocalDateTime fechaHora) {
+		cambiarEstadoDesactivar(fechaHora);
+	}
+	private void cambiarEstadoDesactivar(LocalDateTime fechaHora) {
         if (this.esActiva) {
             this.esActiva = false;
             this.fechaInicioInactividad = fechaHora;
         }
     }
 	
-	public boolean estabaInactivaEn(LocalDateTime fechaHora) {
+	public boolean consultarEstadoInactivoEn(LocalDateTime fechaHora) {
+		return estabaInactivaEn(fechaHora);
+	}
+	private boolean estabaInactivaEn(LocalDateTime fechaHora) {
         if (!this.esActiva && this.fechaInicioInactividad != null) {
             if (!fechaHora.isBefore(this.fechaInicioInactividad)) {
                 return true;
@@ -115,7 +140,7 @@ public abstract class Planta implements Comparable<Planta>{
 		
 		return cumplioCuota;
 	}
-	protected boolean cumplioCuotaEnRegistro(RegistroMonitoreo reg) {
+	private boolean cumplioCuotaEnRegistro(RegistroMonitoreo reg) {
 		return reg.getEnergia() >= calcularCuotaMinima();
 	} 
 	
@@ -125,7 +150,10 @@ public abstract class Planta implements Comparable<Planta>{
 	
 	protected abstract double calcularCuotaMinima();
 	
-	public int[] calcularHistogramaCumplimiento(LocalDate desde, LocalDate hasta) {
+	public int[] consultarHistograma(LocalDate desde, LocalDate hasta) {
+		return calcularHistogramaCumplimiento(desde, hasta);
+	}
+	private int[] calcularHistogramaCumplimiento(LocalDate desde, LocalDate hasta) {
 	    int[] histograma = new int[24]; //24hs: 0-23
 
 	    for (RegistroMonitoreo reg : this.registros) {
@@ -170,51 +198,13 @@ public abstract class Planta implements Comparable<Planta>{
 		return registros;
 	}
 	
-	protected int[] incidenciasPorHora() {
-	    int[] incidencias = new int[24];
-	    
-	    for (RegistroMonitoreo r : registros) {
-	        int hora = r.getFechaHora().getHour();
-	        incidencias[hora] += r.getIncidencias();
-	    }
-	    
-	    return incidencias;
-	}
-	
 	@Override
 	public String toString() {
 	    String estado = this.esActiva ? "ACTIVA" : "INACTIVA";
 	    StringBuilder sb = new StringBuilder();
-	    sb.append("Planta: ").append(this.nombre)
-	      .append(" [").append(estado).append("]")
-	      .append(" | Dir: ").append(this.direccion)
-	      .append(" | CapMax: ").append(this.capMax)
-	      .append(" | Inicio: ").append(this.fechaInicioActividad)
-	      .append(" | Total Generado: ").append(this.calcularTotalGenerado())
-	      .append(" | Monitoreos: ").append(this.registros); // Imprime la lista usando RegistroMonitoreo.toString()
+	    sb.append("Planta: ").append(this.nombre).append(" [").append(estado).append("]").append(" | Dir: ").append(this.direccion).append(" | CapMax: ").append(this.capMax)
+	      .append(" | Inicio: ").append(this.fechaInicioActividad).append(" | Total Generado: ").append(this.calcularTotalGenerado()).append(" | Monitoreos: ").append(this.registros);  
 	    return sb.toString();
 	}
 	
-	@Override
-	public boolean equals(Object obj) {
-	    if (this == obj) return true;
-	    if (obj == null) return false;
-	    if (getClass() != obj.getClass()) return false;
-	    Planta other = (Planta) obj;
-	    
-	    if (nombre == null) {
-	        if (other.nombre != null) return false;
-	    } else if (!nombre.equals(other.nombre)) {
-	        return false;
-	    }
-	    return true;
-	}
-
-	@Override
-	public int hashCode() {
-	    final int prime = 31;
-	    int result = 1;
-	    result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
-	    return result;
-	}
 }

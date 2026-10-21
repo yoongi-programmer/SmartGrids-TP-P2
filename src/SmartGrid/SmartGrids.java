@@ -107,7 +107,7 @@ public class SmartGrids implements ISmartGrids {
             throw new RuntimeException("La planta '" + nombre + "' no existe");
         }
         LocalDateTime fecha = LocalDateTime.parse(fechaHora);
-        planta.cambiarEstadoActivar(fecha);
+        planta.activar(fecha);
     }
 	@Override
 	public void desactivarPlanta(String nombre, String fechaHora) {
@@ -116,7 +116,7 @@ public class SmartGrids implements ISmartGrids {
             throw new RuntimeException("La planta '" + nombre + "' no existe");
         }
         LocalDateTime fecha = LocalDateTime.parse(fechaHora);
-        planta.cambiarEstadoDesactivar(fecha);
+        planta.desactivar(fecha);
     }
 
 	@Override
@@ -197,7 +197,7 @@ public class SmartGrids implements ISmartGrids {
 	@Override
 	public double totalGenerado(String nombre) {
 		if(plantas.containsKey(nombre)) {
-			return plantas.get(nombre).calcularTotalGenerado();
+			return plantas.get(nombre).consultarTotalGenerado();
 		}else {
 			throw new RuntimeException("Ya existe una planta registrada con el nombre: " + nombre);
 		}
@@ -208,11 +208,9 @@ public class SmartGrids implements ISmartGrids {
 	    if (!plantas.containsKey(nombre)) {
 	        throw new RuntimeException("La planta '" + nombre + "' no existe");
 	    }
-	    // Delegamos el cálculo a la clase Planta
-	    return plantas.get(nombre).incidenciasPorHora();
+	    return plantas.get(nombre).consultarIncidenciasPorHora();
 	}
-	
-	
+		
 	//7. Histograma-----------------------------------------------------------------------------------
 	@Override
 	public int[] histogramaCumplimiento(String nombre, String fechaDesde, String fechaHasta) {
@@ -226,12 +224,9 @@ public class SmartGrids implements ISmartGrids {
 	        throw new RuntimeException("La fecha 'desde' no puede ser posterior a 'hasta'.");
 	    }
 
-	    return plantas.get(nombre).calcularHistogramaCumplimiento(desde, hasta);
+	    return plantas.get(nombre).consultarHistograma(desde, hasta);
 	}
 
-	/*
-     * 8) Calcula y devulve la cantidad de plantas renovables por fuente primaria, ordenadas por tipo de fuente.
-     */
 	//8. Cantidad plantas por fuente-----------------------------------------------------------------------------------
 	@Override
 	public Map<String, Integer> plantasRenovablesPorFuente() {
@@ -254,11 +249,8 @@ public class SmartGrids implements ISmartGrids {
 	
 		return plantasRenovablesPorFuente;
 	}
-
-	  /*
-     * 9) Devuelve nombres de las plantas que nunca cumplieron la cuota, incluso si no tienen monitoreos.
-     */
-	//9. Plantas que nunca cumplieron-----------------------------------------------------------------------------------
+	
+	//9. Plantas que nunca cumplieron cuota-----------------------------------------------------------------------------
 	@Override
 	public List<String> plantasQueNuncaCumplieronCuota() {
 		List<String> plantasQueNuncaCumplieronCuota = new ArrayList<String>();
@@ -311,7 +303,7 @@ public class SmartGrids implements ISmartGrids {
 		
 		for(Planta p : listaPlantas) {
 			StringBuilder sb = new StringBuilder();
-			sb.append(p.getNombre()).append(": ").append(p.calcularTotalGenerado());
+			sb.append(p.getNombre()).append(": ").append(p.consultarTotalGenerado());
 			resultado.add(sb.toString());
 		}
 		return resultado;
@@ -323,7 +315,7 @@ public class SmartGrids implements ISmartGrids {
 	    List<String> inactivas = new ArrayList<>();
 	    
 	    for (Planta planta : plantas.values()) {
-	        if (planta.estabaInactivaEn(fecha)) {
+	        if (planta.consultarEstadoInactivoEn(fecha)) {
 	            inactivas.add(planta.getNombre());
 	        }
 	    }
@@ -334,14 +326,13 @@ public class SmartGrids implements ISmartGrids {
 	@Override
 	public String toString() {
 	    StringBuilder sb = new StringBuilder();
-	    sb.append("=== Sistema SmartGrids ===\n");
-	    sb.append("Total de plantas registradas: ").append(plantas.size()).append("\n");
+	    sb.append(" ===[ Sistema SmartGrids ]===\n");
+	    sb.append(" Total de plantas registradas: ").append(plantas.size()).append("\n");
 	    
 	    if (plantas.isEmpty()) {
-	        sb.append("(Sin plantas registradas)\n");
-	    } else {
-	        for (Planta p : plantas.values()) {
-	            // Llama implícitamente a p.toString() de cada planta
+	        sb.append(" (Sin plantas registradas)\n");
+	    } else {	 
+	        for (Planta p : plantas.values()) {	          
 	            sb.append(p.toString()).append("\n");
 	        }
 	    }

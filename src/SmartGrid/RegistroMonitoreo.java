@@ -31,6 +31,6 @@ public class RegistroMonitoreo {
 		
 		@Override
 		public String toString() {
-		    return "[" + fechaHora + " -> Energia: " + energia + ", Incidencias: " + cantIncidencias + "]";
+		    return "{" + fechaHora + " -> " + energia + " | " + cantIncidencias + "}\n";
 		}
 }
