@@ -17,8 +17,15 @@ public abstract class Planta implements Comparable<Planta>{
 	
 	public Planta( String nombre, String direccion, double capMax, LocalDateTime fecha) {
 		if(nombre == null) {
-			return;
+			throw new RuntimeException("Debe ingresar un nombre válido");
 		}
+		if(direccion == null) {
+			throw new RuntimeException("Debe ingresar una direccion válido");
+		}
+		if(capMax < 0) {
+			throw new RuntimeException("Los capacidad máxima no pueden ser < 0");
+		}
+
 		this.nombre = nombre;
 		this.direccion = direccion;
 		this.capMax = capMax;
@@ -132,15 +139,15 @@ public abstract class Planta implements Comparable<Planta>{
 		}
 		
 		double cuotaMinima = calcularCuotaMinima();
-		boolean cumplioCuota = true;
+		boolean cumplioCuota = false;
 		
 		for(RegistroMonitoreo registro:registros) {
-			cumplioCuota = cumplioCuota && (registro.getEnergia() >= cuotaMinima);
+			cumplioCuota = cumplioCuota || (registro.getEnergia() >= cuotaMinima);
 		}
 		
 		return cumplioCuota;
 	}
-	private boolean cumplioCuotaEnRegistro(RegistroMonitoreo reg) {
+	protected boolean cumplioCuotaEnRegistro(RegistroMonitoreo reg) {
 		return reg.getEnergia() >= calcularCuotaMinima();
 	} 
 	

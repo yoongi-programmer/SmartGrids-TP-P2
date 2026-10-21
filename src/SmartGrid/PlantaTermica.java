@@ -7,6 +7,12 @@ public class PlantaTermica extends PlantaNoRenovable{
 	
 	public PlantaTermica(String nombre, String direccion, double capMax, LocalDateTime fecha, String tipoCombustible, double objetivoEmision, double capCombustible) {
 		super(nombre, direccion, capMax, fecha, tipoCombustible);
+		if(objetivoEmision < 0) {
+			throw new RuntimeException("Debe ingresar una valor numérico válido");
+		}
+		if(capCombustible < 0) {
+			throw new RuntimeException("Debe ingresar un valor válido");
+		}
 		this.objetivoEmision = objetivoEmision;
 		this.capCombustible = capCombustible;
 	}
@@ -31,13 +37,13 @@ public class PlantaTermica extends PlantaNoRenovable{
 		}
 		
 		double cuotaMinima = consultarCuotaMinima();
-		boolean cumplioCuota = true;
+		boolean cumplioCuota = false;
 		
 		for(RegistroMonitoreo registro:super.getRegistros()) {
 			MonitoreoPlantaTermica registroPlantaTermica = (MonitoreoPlantaTermica) registro; 
 			boolean superoCuotaMinima = registro.getEnergia() >= cuotaMinima;
 			boolean noSuperoObjetivoEmision = registroPlantaTermica.getCantidadEmisionCO2() < objetivoEmision;
-			cumplioCuota = cumplioCuota && superoCuotaMinima && noSuperoObjetivoEmision;
+			cumplioCuota = (cumplioCuota || superoCuotaMinima) && noSuperoObjetivoEmision;
 		}
 		
 		return cumplioCuota;

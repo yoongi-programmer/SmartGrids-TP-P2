@@ -10,6 +10,16 @@ public class PlantaEolica extends PlantaRenovable {
 	public PlantaEolica(String nombre, String direccion, double capMax, LocalDateTime fecha, String fuentePrimaria, double eficienciaPromedio,
             double alturaTorres, double velocidadMinDeViento, int cantAerogeneradores) {
 		super (nombre, direccion, capMax, fecha, fuentePrimaria, eficienciaPromedio);
+		
+		if(alturaTorres < 0) {
+			throw new RuntimeException("Debe ingresar una valor numérico válido");
+		}
+		if(velocidadMinDeViento < 0) {
+			throw new RuntimeException("Debe ingresar un valor válido");
+		}
+		if(cantAerogeneradores < 0) {
+			throw new RuntimeException("Debe ingresar una cantidad válida");
+		}
 		this.alturaTorres = alturaTorres;
 		this.velocidadMinDeViento = velocidadMinDeViento;
 		this.cantAerogeneradores = cantAerogeneradores;

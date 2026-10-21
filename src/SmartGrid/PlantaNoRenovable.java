@@ -7,6 +7,9 @@ public abstract class PlantaNoRenovable extends Planta {
 	
 	public PlantaNoRenovable(String nombre, String direccion, double capMax, LocalDateTime fecha, String tipoCombustible) {
 		super(nombre, direccion, capMax, fecha);
+		if(tipoCombustible == null) {
+			throw new RuntimeException("Debe ingresar una tipo de combustible válido");
+		}
 		this.tipoCombustible = tipoCombustible;
 	}
 

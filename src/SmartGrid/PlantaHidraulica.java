@@ -9,6 +9,13 @@ public class PlantaHidraulica extends PlantaRenovable{
 	public PlantaHidraulica(String nombre, String direccion, double capMax, LocalDateTime fecha, String fuentePrimaria,
 			double eficienciaPromedio,double capacidadEmbalse, int cantTurbinas) {
 		super(nombre, direccion, capMax, fecha, fuentePrimaria, eficienciaPromedio);
+		if(cantTurbinas < 0) {
+			throw new RuntimeException("Debe ingresar un valor válido");
+		}
+		if(capacidadEmbalse < 0) {
+			throw new RuntimeException("Debe ingresar un valor válido");
+		}
+		
 		this.capacidadEmbalse = capacidadEmbalse;
 		this.cantTurbinas = cantTurbinas;
 	}
