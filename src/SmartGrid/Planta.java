@@ -16,10 +16,10 @@ public abstract class Planta implements Comparable<Planta>{
 	private LocalDateTime fechaInicioInactividad;
 	
 	public Planta( String nombre, String direccion, double capMax, LocalDateTime fecha) {
-		if(nombre == null) {
+		if(nombre == null || nombre.length() == 0 || nombre.length() > 50) {
 			throw new RuntimeException("Debe ingresar un nombre válido");
 		}
-		if(direccion == null) {
+		if(direccion == null || direccion.length() == 0 || direccion.length() > 100) {
 			throw new RuntimeException("Debe ingresar una direccion válido");
 		}
 		if(capMax < 0) {
@@ -80,7 +80,13 @@ public abstract class Planta implements Comparable<Planta>{
 	
 	private boolean existeRegistroMismoHorario(LocalDateTime fechaHoraRegistroNuevo) {
 		for(RegistroMonitoreo r: registros) {
-			if(r.getFechaHora().compareTo(fechaHoraRegistroNuevo) == 0) {
+			int horaRegistro = r.getFechaHora().getHour();
+			LocalDate fechaRegistro = r.getFechaHora().toLocalDate();
+			
+			int horaRNuevo = fechaHoraRegistroNuevo.getHour();
+			LocalDate fechaRNuevo = fechaHoraRegistroNuevo.toLocalDate();
+			
+			if(horaRegistro == horaRNuevo && fechaRegistro.compareTo(fechaRNuevo) == 0) {
 				return true;
 			}
 		}
@@ -133,20 +139,21 @@ public abstract class Planta implements Comparable<Planta>{
 	public boolean cumplioCuotaDeGeneracion() {
 		return cumplioCuota();
 	}
-	protected boolean cumplioCuota() {
+	
+	private boolean cumplioCuota() {
 		if(registros.isEmpty()) {
 			return false;
 		}
 		
-		double cuotaMinima = calcularCuotaMinima();
 		boolean cumplioCuota = false;
 		
 		for(RegistroMonitoreo registro:registros) {
-			cumplioCuota = cumplioCuota || (registro.getEnergia() >= cuotaMinima);
+			cumplioCuota = cumplioCuota || cumplioCuotaEnRegistro(registro);
 		}
 		
 		return cumplioCuota;
 	}
+	
 	protected boolean cumplioCuotaEnRegistro(RegistroMonitoreo reg) {
 		return reg.getEnergia() >= calcularCuotaMinima();
 	} 
@@ -160,6 +167,7 @@ public abstract class Planta implements Comparable<Planta>{
 	public int[] consultarHistograma(LocalDate desde, LocalDate hasta) {
 		return calcularHistogramaCumplimiento(desde, hasta);
 	}
+	
 	private int[] calcularHistogramaCumplimiento(LocalDate desde, LocalDate hasta) {
 	    int[] histograma = new int[24]; //24hs: 0-23
 

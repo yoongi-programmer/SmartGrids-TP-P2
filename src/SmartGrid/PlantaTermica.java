@@ -31,25 +31,6 @@ public class PlantaTermica extends PlantaNoRenovable{
 	}
 	
 	@Override
-	protected boolean cumplioCuota() {
-		if(super.getRegistros().isEmpty()) {
-			return false;
-		}
-		
-		double cuotaMinima = consultarCuotaMinima();
-		boolean cumplioCuota = false;
-		
-		for(RegistroMonitoreo registro:super.getRegistros()) {
-			MonitoreoPlantaTermica registroPlantaTermica = (MonitoreoPlantaTermica) registro; 
-			boolean superoCuotaMinima = registro.getEnergia() >= cuotaMinima;
-			boolean noSuperoObjetivoEmision = registroPlantaTermica.getCantidadEmisionCO2() < objetivoEmision;
-			cumplioCuota = (cumplioCuota || superoCuotaMinima) && noSuperoObjetivoEmision;
-		}
-		
-		return cumplioCuota;
-	}
-	
-	@Override
 	protected boolean cumplioCuotaEnRegistro(RegistroMonitoreo reg) {
 	    MonitoreoPlantaTermica registroPlantaTermica = (MonitoreoPlantaTermica) reg;
 	    boolean superoCuotaMinima = reg.getEnergia() >= consultarCuotaMinima();

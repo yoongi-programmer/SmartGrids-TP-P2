@@ -199,7 +199,7 @@ public class SmartGrids implements ISmartGrids {
 		if(plantas.containsKey(nombre)) {
 			return plantas.get(nombre).consultarTotalGenerado();
 		}else {
-			throw new RuntimeException("Ya existe una planta registrada con el nombre: " + nombre);
+			throw new RuntimeException("No existe una planta registrada con el nombre: " + nombre);
 		}
 	}
 	//6. Consulta total incidencias-----------------------------------------------------------------------------------

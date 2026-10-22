@@ -11,7 +11,7 @@ public class PlantaSolar extends PlantaRenovable {
 			int cantPanelesInstalados, double superficieCubierta) {
 		super(nombre, direccion, capMax, fecha, fuentePrimaria, eficienciaPromedio);
 		
-		if(horasDeRadiacionDiaria < 0) {
+		if(horasDeRadiacionDiaria < 0 || horasDeRadiacionDiaria > 24) {
 			throw new RuntimeException("Debe ingresar una valor numérico válido");
 		}
 		if(cantPanelesInstalados < 0) {
